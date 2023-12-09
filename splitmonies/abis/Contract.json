@@ -66,6 +66,12 @@
       },
       {
         "indexed": false,
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      },
+      {
+        "indexed": false,
         "internalType": "address[]",
         "name": "members",
         "type": "address[]"

@@ -15,6 +15,7 @@ type ExpenseAdded @entity(immutable: true) {
 type GroupCreated @entity(immutable: true) {
   id: Bytes!
   groupId: BigInt! # uint256
+  owner: Bytes! # address
   members: [Bytes!]! # address[]
   groupName: String! # string
   description: String! # string

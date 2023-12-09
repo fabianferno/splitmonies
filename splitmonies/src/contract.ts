@@ -1,4 +1,3 @@
-import { Bytes } from "@graphprotocol/graph-ts"
 import {
   ExpenseAdded as ExpenseAddedEvent,
   GroupCreated as GroupCreatedEvent,
@@ -15,7 +14,7 @@ export function handleExpenseAdded(event: ExpenseAddedEvent): void {
   entity.requester = event.params.requester
   entity.amount = event.params.amount
   entity.description = event.params.description
-  entity.payers = changetype<Bytes[]>(event.params.payers)
+  entity.payers = event.params.payers
   entity.share = event.params.share
 
   entity.blockNumber = event.block.number
@@ -30,7 +29,8 @@ export function handleGroupCreated(event: GroupCreatedEvent): void {
     event.transaction.hash.concatI32(event.logIndex.toI32())
   )
   entity.groupId = event.params.groupId
-  entity.members = changetype<Bytes[]>(event.params.members)
+  entity.owner = event.params.owner
+  entity.members = event.params.members
   entity.groupName = event.params.groupName
   entity.description = event.params.description
   entity.groupImage = event.params.groupImage

@@ -1,14 +1,14 @@
 specVersion: 0.0.5
 schema:
-  file: schema.graphql
+  file: ./schema.graphql
 dataSources:
   - kind: ethereum
     name: Contract
     network: celo-alfajores
     source:
-      address: "0x7048802ad7CE3F52035dE87a4Fe85fA1c6632902"
+      address: "0xaf55E60602765CD709f7fA63EA9D31CDCD8F5763"
       abi: Contract
-      startBlock: 21343420
+      startBlock: 0
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -19,12 +19,12 @@ dataSources:
         - SplitPaid
       abis:
         - name: Contract
-          file: Contract\abis\Contract.json
+          file: ./abis/Contract.json
       eventHandlers:
         - event: ExpenseAdded(uint256,uint256,address,uint256,string,address[],uint256)
           handler: handleExpenseAdded
-        - event: GroupCreated(uint256,address[],string,string,string)
+        - event: GroupCreated(uint256,address,address[],string,string,string)
           handler: handleGroupCreated
         - event: SplitPaid(uint256,uint256,address,address,string,uint256)
           handler: handleSplitPaid
-      file: Contract\Contract.wasm
+      file: ./src/contract.ts

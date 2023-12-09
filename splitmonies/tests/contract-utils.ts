@@ -55,6 +55,7 @@ export function createExpenseAddedEvent(
 
 export function createGroupCreatedEvent(
   groupId: BigInt,
+  owner: Address,
   members: Array<Address>,
   groupName: string,
   description: string,
@@ -69,6 +70,9 @@ export function createGroupCreatedEvent(
       "groupId",
       ethereum.Value.fromUnsignedBigInt(groupId)
     )
+  )
+  groupCreatedEvent.parameters.push(
+    new ethereum.EventParam("owner", ethereum.Value.fromAddress(owner))
   )
   groupCreatedEvent.parameters.push(
     new ethereum.EventParam("members", ethereum.Value.fromAddressArray(members))
