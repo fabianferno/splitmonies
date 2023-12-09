@@ -1,0 +1,39 @@
+type ExpenseAdded @entity(immutable: true) {
+  id: Bytes!
+  groupId: BigInt! # uint256
+  expenseId: BigInt! # uint256
+  requester: Bytes! # address
+  amount: BigInt! # uint256
+  description: String! # string
+  payers: [Bytes!]! # address[]
+  share: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type GroupCreated @entity(immutable: true) {
+  id: Bytes!
+  groupId: BigInt! # uint256
+  owner: Bytes! # address
+  members: [Bytes!]! # address[]
+  groupName: String! # string
+  description: String! # string
+  groupImage: String! # string
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type SplitPaid @entity(immutable: true) {
+  id: Bytes!
+  groupId: BigInt! # uint256
+  expenseId: BigInt! # uint256
+  payer: Bytes! # address
+  requester: Bytes! # address
+  description: String! # string
+  share: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
