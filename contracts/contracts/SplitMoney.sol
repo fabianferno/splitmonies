@@ -60,6 +60,7 @@ contract SplitMoney {
 
     event GroupCreated(
         uint256 groupId,
+        address owner,
         address[] members,
         string groupName,
         string description,
@@ -98,7 +99,7 @@ contract SplitMoney {
             GroupListing[uid].isMember[_members[i]] = true;
         }
 
-        emit GroupCreated(uid, _members, _groupName, _description, _groupImage);
+        emit GroupCreated(uid,msg.sender, _members, _groupName, _description, _groupImage);
     }
 
     function getGroupDetails(uint256 _groupId) public view returns (MyGroups memory) {
