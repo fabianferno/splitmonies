@@ -105,7 +105,7 @@ export default function Index() {
             Available Balance
           </div>
           <div className="text-gra-600 text-3xl font-black text-center">
-            {parseInt(balance)} cUSD
+            {parseInt(balance) / 1000000000000000000} cUSD
           </div>
         </div>
       </div>
