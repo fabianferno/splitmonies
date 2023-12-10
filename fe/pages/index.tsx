@@ -9,10 +9,16 @@ import {
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { DocumentDuplicateIcon } from "@heroicons/react/24/solid";
-import { useAccount, useContractRead } from "wagmi";
+import {
+  useAccount,
+  useConnect,
+  useContractRead,
+  usePublicClient,
+} from "wagmi";
 import { superShortenAddress } from "@/utilities/shortenAddress";
 import { useRouter } from "next/router";
 import { CONTRACT_ABIS } from "@/utilities/contractDetails";
+import { InjectedConnector } from "wagmi/connectors/injected";
 
 export default function Index() {
   const { address } = useAccount();
@@ -55,6 +61,14 @@ export default function Index() {
   ];
   const [balance, setBalance] = React.useState<any>(0);
 
+  const { connect } = useConnect({
+    connector: new InjectedConnector(),
+  });
+
+  useEffect(() => {
+    connect();
+  }, []);
+
   const {
     data: balanceData,
     refetch: balanceDataRefetch,
@@ -75,7 +89,7 @@ export default function Index() {
 
   useEffect(() => {
     console.log(balanceData);
-    if (balanceDataLoading) return;
+    if (balanceDataLoading || !address) return;
     setBalance(balanceData);
   }, [balanceDataLoading]);
 
