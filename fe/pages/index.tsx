@@ -88,8 +88,8 @@ export default function Index() {
   }, [address, router.isReady]);
 
   useEffect(() => {
-    console.log(balanceData);
     if (balanceDataLoading || !address) return;
+    console.log(balanceData);
     setBalance(balanceData);
   }, [balanceDataLoading]);
 

@@ -3,12 +3,13 @@ import { ReactNode } from "react";
 import { ReceiptPercentIcon } from "@heroicons/react/24/outline";
 import { useState, useEffect } from "react";
 import protobuf from "protobufjs";
-import { useContractRead } from "wagmi";
+import { useContractRead, useConnect } from "wagmi";
 import { CONTRACT_ABIS } from "@/utilities/contractDetails";
 import { useAccount, useContractWrite } from "wagmi";
 import { useRouter } from "next/router";
 import { superShortenAddress } from "@/utilities/shortenAddress";
 import axios from "axios";
+import { InjectedConnector } from "wagmi/connectors/injected";
 
 interface Props {
   children: ReactNode;
@@ -23,6 +24,14 @@ const GroupPage = () => {
   //     100 - (progressData?.total / progressData?.uploaded)?.toFixed(2);
   //   console.log(percentageDone);
   // };
+
+  const { connect } = useConnect({
+    connector: new InjectedConnector(),
+  });
+
+  useEffect(() => {
+    connect();
+  }, []);
 
   const { isLoading: paySplitLoading, writeAsync: paySplitAsync } =
     useContractWrite({

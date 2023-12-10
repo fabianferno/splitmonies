@@ -3,19 +3,28 @@ import Head from "next/head";
 import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { DocumentDuplicateIcon } from "@heroicons/react/24/solid";
-import { useContractRead, useContractWrite } from "wagmi";
+import { useConnect, useContractRead, useContractWrite } from "wagmi";
 import { CONTRACT_ABIS } from "@/utilities/contractDetails";
 import { useAccount } from "wagmi";
 import lighthouse from "@lighthouse-web3/sdk";
 import { useRouter } from "next/router";
 import { useSearchParams } from "next/navigation";
 import { group } from "console";
+import { InjectedConnector } from "wagmi/connectors/injected";
 
 export default function CreateExpense() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
   const groupId = searchParams.get("group");
+
+  const { connect } = useConnect({
+    connector: new InjectedConnector(),
+  });
+
+  useEffect(() => {
+    connect();
+  }, []);
 
   const progressCallback = (progressData) => {
     let percentageDone =
