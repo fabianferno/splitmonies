@@ -33,6 +33,7 @@ import {
   PlusCircleIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
+import React from "react";
 
 const navigation = [
   { name: "Home", href: "/", icon: HomeIcon },
