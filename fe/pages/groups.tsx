@@ -14,7 +14,7 @@ export default function Index() {
 
   // Get expenses from the graph
   useEffect(() => {
-    if (router.isReady) {
+    if (router.isReady && address) {
       const apiUrl =
         "https://api.studio.thegraph.com/query/55648/splitmonies/version/latest"; // Replace with your GraphQL API URL
       const query = `
@@ -51,7 +51,7 @@ export default function Index() {
         }
       });
     }
-  }, [router.isReady]);
+  }, [router.isReady, address]);
 
   return (
     <>

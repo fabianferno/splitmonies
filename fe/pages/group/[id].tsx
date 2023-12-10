@@ -33,10 +33,10 @@ export default function GroupPage() {
   const searchParams = useSearchParams();
   const groupId = searchParams.get("id");
 
-  const [expenses, setExpenses] = useState<any>();
+  const [expenses, setExpenses] = useState<any>([]);
   const [groupImageHash, setGroupImageHash] = useState("");
 
-  const [combinedMessages, setCombinedMessages] = useState<any>();
+  const [combinedMessages, setCombinedMessages] = useState<any>([]);
 
   useEffect(() => {
     if (router.isReady) {
@@ -140,7 +140,14 @@ export default function GroupPage() {
       );
       console.log(newMessage);
       // await queryMessage(wakuNode)
-      setMessages([...messages, newMessage]);
+      setMessages([
+        ...messages,
+        {
+          message: inputMessage,
+          sender: address,
+          timestamp: new Date().getTime(),
+        },
+      ]);
     } else {
       console.log("No waku node");
     }
