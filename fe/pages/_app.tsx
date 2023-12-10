@@ -1,3 +1,5 @@
+"use client";
+
 import "@/styles/globals.css";
 import "@/styles/index.scss";
 import "@rainbow-me/rainbowkit/styles.css";
@@ -33,20 +35,14 @@ import {
   PlusCircleIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
-import React from "react";
 
 const navigation = [
   { name: "Home", href: "/", icon: HomeIcon },
   { name: "Groups", href: "/groups", icon: UsersIcon },
   { name: "Create Group", icon: PlusCircleIcon, href: "/create-group" },
-  { name: "Create Expense", icon: PlusCircleIcon, href: "/create-expense" },
+  // { name: "Create Expense", icon: PlusCircleIcon, href: "/create-expense" },
   { name: "Settle Up", href: "/settle-up", icon: WalletIcon },
-  { name: "Chat", icon: ChatBubbleBottomCenterIcon, href: "/chat" },
-];
-const teams = [
-  { id: 1, name: "Heroicons", href: "#", initial: "H", current: false },
-  { id: 2, name: "Tailwind Labs", href: "#", initial: "T", current: false },
-  { id: 3, name: "Workcation", href: "#", initial: "W", current: false },
+  // { name: "Chat", icon: ChatBubbleBottomCenterIcon, href: "/chat" },
 ];
 
 // const NODE_OPTIONS = { defaultBootstrap: true };
@@ -201,6 +197,7 @@ export default function App({ Component, pageProps }: AppProps) {
                                   {navigation.map((item) => (
                                     <li key={item.name}>
                                       <Link
+                                        onClick={() => setSidebarOpen(false)}
                                         href={item.href}
                                         className={classNames(
                                           pathname === item.href
@@ -219,36 +216,6 @@ export default function App({ Component, pageProps }: AppProps) {
                                           aria-hidden="true"
                                         />
                                         {item.name}
-                                      </Link>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </li>
-                              <li>
-                                <div className="text-xs font-semibold leading-6 text-indigo-200">
-                                  Your teams
-                                </div>
-                                <ul
-                                  role="list"
-                                  className="-mx-2 mt-2 space-y-1"
-                                >
-                                  {teams.map((team) => (
-                                    <li key={team.name}>
-                                      <Link
-                                        href={team.href}
-                                        className={classNames(
-                                          team.current
-                                            ? "bg-indigo-700 text-white"
-                                            : "text-indigo-200 hover:text-white hover:bg-indigo-700",
-                                          "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
-                                        )}
-                                      >
-                                        <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-indigo-400 bg-indigo-500 text-[0.625rem] font-medium text-white">
-                                          {team.initial}
-                                        </span>
-                                        <span className="truncate">
-                                          {team.name}
-                                        </span>
                                       </Link>
                                     </li>
                                   ))}
@@ -304,31 +271,6 @@ export default function App({ Component, pageProps }: AppProps) {
                                   aria-hidden="true"
                                 />
                                 {item.name}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      </li>
-                      <li>
-                        <div className="text-xs font-semibold leading-6 text-indigo-200">
-                          Your teams
-                        </div>
-                        <ul role="list" className="-mx-2 mt-2 space-y-1">
-                          {teams.map((team) => (
-                            <li key={team.name}>
-                              <Link
-                                href={team.href}
-                                className={classNames(
-                                  team.current
-                                    ? "bg-indigo-700 text-white"
-                                    : "text-indigo-200 hover:text-white hover:bg-indigo-700",
-                                  "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
-                                )}
-                              >
-                                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-indigo-400 bg-indigo-500 text-[0.625rem] font-medium text-white">
-                                  {team.initial}
-                                </span>
-                                <span className="truncate">{team.name}</span>
                               </Link>
                             </li>
                           ))}
