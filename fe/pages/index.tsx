@@ -9,10 +9,16 @@ import {
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { DocumentDuplicateIcon } from "@heroicons/react/24/solid";
-import { useAccount, useContractRead } from "wagmi";
+import {
+  useAccount,
+  useConnect,
+  useContractRead,
+  usePublicClient,
+} from "wagmi";
 import { superShortenAddress } from "@/utilities/shortenAddress";
 import { useRouter } from "next/router";
 import { CONTRACT_ABIS } from "@/utilities/contractDetails";
+import { InjectedConnector } from "wagmi/connectors/injected";
 
 export default function Index() {
   const { address } = useAccount();
@@ -55,6 +61,14 @@ export default function Index() {
   ];
   const [balance, setBalance] = React.useState<any>(0);
 
+  const { connect } = useConnect({
+    connector: new InjectedConnector(),
+  });
+
+  useEffect(() => {
+    connect();
+  }, []);
+
   const {
     data: balanceData,
     refetch: balanceDataRefetch,
@@ -74,8 +88,8 @@ export default function Index() {
   }, [address, router.isReady]);
 
   useEffect(() => {
+    if (balanceDataLoading || !address) return;
     console.log(balanceData);
-    if (balanceDataLoading) return;
     setBalance(balanceData);
   }, [balanceDataLoading]);
 
@@ -91,7 +105,7 @@ export default function Index() {
             Available Balance
           </div>
           <div className="text-gra-600 text-3xl font-black text-center">
-            {parseInt(balance)} cUSD
+            {parseInt(balance) / 1000000000000000000} cUSD
           </div>
         </div>
       </div>

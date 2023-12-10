@@ -27,6 +27,9 @@ import { Dialog, Transition } from "@headlessui/react";
 // import { CONTENT_TOPIC } from "@/components/WakuChat/config";
 import { Protocols } from "@waku/interfaces";
 
+import { useConnect } from "wagmi";
+import { InjectedConnector } from "wagmi/connectors/injected";
+
 import { Fragment } from "react";
 import {
   Bars3Icon,
@@ -35,6 +38,9 @@ import {
   PlusCircleIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
+import { useAccount, useDisconnect, useBalance } from "wagmi";
+import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
+import { Alfajores } from "@celo/rainbowkit-celo/chains";
 
 const navigation = [
   { name: "Home", href: "/", icon: HomeIcon },
@@ -86,22 +92,23 @@ export default function App({ Component, pageProps }: AppProps) {
   const [ready, setReady] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const { publicClient, chains } = configureChains(
-    // [mainnet, optimism],
-    [celoAlfajores],
+  const { chains, publicClient } = configureChains(
+    [Alfajores],
     [publicProvider()]
   );
 
-  const { connectors } = getDefaultWallets({
-    appName: "NounerKarma",
-    projectId: "032e7d86545e1e9d28e796da73f4f4c1",
-    chains,
-  });
-
-  const wagmiConfig = createConfig({
+  const config = createConfig({
     autoConnect: true,
-    connectors,
     publicClient,
+    connectors: [
+      new InjectedConnector({
+        chains,
+        options: {
+          name: "Injected",
+          shimDisconnect: true,
+        },
+      }),
+    ],
   });
 
   useEffect(() => {
@@ -111,7 +118,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
       {ready ? (
-        <WagmiConfig config={wagmiConfig}>
+        <WagmiConfig config={config}>
           <RainbowKitProvider
             chains={chains}
             theme={darkTheme({

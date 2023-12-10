@@ -3,12 +3,13 @@ import { ReactNode } from "react";
 import { ReceiptPercentIcon } from "@heroicons/react/24/outline";
 import { useState, useEffect } from "react";
 import protobuf from "protobufjs";
-import { useContractRead } from "wagmi";
+import { useContractRead, useConnect } from "wagmi";
 import { CONTRACT_ABIS } from "@/utilities/contractDetails";
 import { useAccount, useContractWrite } from "wagmi";
 import { useRouter } from "next/router";
 import { superShortenAddress } from "@/utilities/shortenAddress";
 import axios from "axios";
+import { InjectedConnector } from "wagmi/connectors/injected";
 
 interface Props {
   children: ReactNode;
@@ -23,6 +24,14 @@ const GroupPage = () => {
   //     100 - (progressData?.total / progressData?.uploaded)?.toFixed(2);
   //   console.log(percentageDone);
   // };
+
+  const { connect } = useConnect({
+    connector: new InjectedConnector(),
+  });
+
+  useEffect(() => {
+    connect();
+  }, []);
 
   const { isLoading: paySplitLoading, writeAsync: paySplitAsync } =
     useContractWrite({
@@ -98,9 +107,26 @@ const GroupPage = () => {
     }
   }, [expenseData, expenseDataLoading]);
 
+  const { isLoading: approveLoading, writeAsync: approveAsync } =
+  useContractWrite({
+    abi: CONTRACT_ABIS.SMTokenContract.abi,
+    address: "0x874069fa1eb16d44d622f2e0ca25eea172369bc1",
+    functionName: "approve",
+  });
+
   return (
     <div className="my-5 chat-interface h-full grow flex flex-col">
       <div className="text-2xl font-extrabold">Group Expenses</div>
+      <button
+                  type="submit"
+                  onClick={() => approveAsync({
+                    args: [CONTRACT_ABIS.SplitMoneyContract.address, 1000000],
+                  })
+                  }
+                  className="rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 my-4"
+                >
+                  Approve 1000000 cUSD
+                </button>
       {!expenseDataLoading && (
         <div className="mt-3">
           {expenses?.map((expense: any, index: number) => (
@@ -132,7 +158,7 @@ const GroupPage = () => {
                 </div>
               </div>
               <div className="text-sm text-gray-900 font-bold">
-                {parseInt(expense.amount)} ETH
+                {parseInt(expense.amount)} cUSD
               </div>
               {!transactionLoading ? (
                 <button

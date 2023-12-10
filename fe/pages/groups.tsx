@@ -1,16 +1,25 @@
 import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
-import { useAccount } from "wagmi";
+import { useAccount, useConnect } from "wagmi";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { superShortenAddress } from "@/utilities/shortenAddress";
+import { InjectedConnector } from "wagmi/connectors/injected";
 
 export default function Index() {
   const router = useRouter();
   const { address } = useAccount();
   const [groups, setGroups] = useState<any>();
   const [groupDataLoading, setGroupDataLoading] = useState<boolean>(true);
+
+  const { connect } = useConnect({
+    connector: new InjectedConnector(),
+  });
+
+  useEffect(() => {
+    connect();
+  }, []);
 
   // Get expenses from the graph
   useEffect(() => {
@@ -43,9 +52,9 @@ export default function Index() {
         // Add any necessary authentication headers if required
       };
       axios.post(apiUrl, { query }, { headers }).then((res) => {
-        console.log(res.data.data.groupCreateds);
+        console.log(res.data.data);
 
-        if (res.data.data.groupCreateds.length > 0) {
+        if (res.data.data?.groupCreateds.length > 0) {
           setGroups(res.data.data.groupCreateds);
           setGroupDataLoading(false);
         }

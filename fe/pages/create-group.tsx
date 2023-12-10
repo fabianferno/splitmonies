@@ -3,10 +3,11 @@ import Head from "next/head";
 import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { DocumentDuplicateIcon } from "@heroicons/react/24/solid";
-import { useContractRead, useContractWrite } from "wagmi";
+import { useConnect, useContractRead, useContractWrite } from "wagmi";
 import { CONTRACT_ABIS } from "@/utilities/contractDetails";
 import { useAccount } from "wagmi";
 import lighthouse from "@lighthouse-web3/sdk";
+import { InjectedConnector } from "wagmi/connectors/injected";
 
 export default function Index() {
   const { address } = useAccount();
@@ -16,6 +17,14 @@ export default function Index() {
       100 - (progressData?.total / progressData?.uploaded)?.toFixed(2);
     console.log(percentageDone);
   };
+
+  const { connect } = useConnect({
+    connector: new InjectedConnector(),
+  });
+
+  useEffect(() => {
+    connect();
+  }, []);
 
   const { isLoading: groupCreationLoading, writeAsync: groupCreateAsync } =
     useContractWrite({

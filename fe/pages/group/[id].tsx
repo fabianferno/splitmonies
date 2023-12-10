@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useRef } from "react";
 import { useState, useEffect } from "react";
-import { useContractWrite } from "wagmi";
+import { useConnect, useContractWrite } from "wagmi";
 import { CONTRACT_ABIS } from "@/utilities/contractDetails";
 import { useAccount } from "wagmi";
 import { useRouter } from "next/router";
@@ -21,6 +21,7 @@ import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { useSearchParams } from "next/navigation";
 import { superShortenAddress } from "@/utilities/shortenAddress";
+import { InjectedConnector } from "wagmi/connectors/injected";
 
 export default function GroupPage() {
   const router = useRouter();
@@ -33,7 +34,15 @@ export default function GroupPage() {
   const searchParams = useSearchParams();
   const groupId = searchParams.get("id");
 
-  const [expenses, setExpenses] = useState<any>([]);
+  const { connect } = useConnect({
+    connector: new InjectedConnector(),
+  });
+
+  useEffect(() => {
+    connect();
+  }, []);
+
+  const [expenses, setExpenses] = useState<any>();
   const [groupImageHash, setGroupImageHash] = useState("");
 
   const [combinedMessages, setCombinedMessages] = useState<any>([]);

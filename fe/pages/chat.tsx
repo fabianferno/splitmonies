@@ -18,10 +18,11 @@ import {
   receiveMessage,
   sendMessage,
 } from "@/components/Waku";
-import { useAccount } from "wagmi";
+import { useAccount , useConnect} from "wagmi";
 import { createLightNode } from "@waku/sdk";
 import { waitForRemotePeer, Protocols } from "@waku/sdk";
 import { multiaddr } from "@multiformats/multiaddr";
+import { InjectedConnector } from "wagmi/connectors/injected";
 
 interface Props {
   children: ReactNode;
@@ -32,6 +33,14 @@ export default function Chat() {
   const [messages, setMessages] = useState<any>([]);
   const [wakuNode, setWakuNode] = useState<any>();
   const { address } = useAccount();
+
+  const { connect } = useConnect({
+    connector: new InjectedConnector(),
+  });
+
+  useEffect(() => {
+    connect();
+  }, []);
 
   // // Update the inputMessage state as the user input changes
   // const handleInputChange = (e: {
